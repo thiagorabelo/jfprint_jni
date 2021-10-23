@@ -77,7 +77,6 @@ void log(std::ostream &output, T type, L location, F func, Ts const&... ts)
 
 	std::string formated_time(time_buffer);
 
-
 	std::stringstream stream;
 	stream << type << " [" << formated_time << " " << location << " " << func << "] ";
 
@@ -91,9 +90,11 @@ void log(std::ostream &output, T type, L location, F func, Ts const&... ts)
 #define LOCATION_INFO __FILE__ ":" _TOSTR(__LINE__)
 #define FUNC_DESC __PRETTY_FUNCTION__
 
+#define LOG_STREAM std::cout
+
 
 #ifndef NDEBUG
-#define debug(head, ...) log(std::cout, "DEBUG", LOCATION_INFO, FUNC_DESC, head, ##__VA_ARGS__)
+#define debug(head, ...) log(LOG_STREAM, "DEBUG", LOCATION_INFO, FUNC_DESC, head, ##__VA_ARGS__)
 #else
 #define debug(head, ...)
 #endif

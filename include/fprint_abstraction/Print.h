@@ -24,6 +24,7 @@ class Print
 {
 	public:
 		Print() = delete;
+        Print(FpPrint *print);
 		Print(Print& other);
 		Print(Print&& other);
 
@@ -60,7 +61,6 @@ class Print
 	private:
 		friend class Device;
 		Print(FpDevice *device);
-		Print(FpPrint *print);
 
 	private:
 		FpPrint *print_ptr;

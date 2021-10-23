@@ -22,6 +22,7 @@ class Context
 {
 	public:
 		Context() = delete;
+		Context(FpContext *pointer);
 		Context(Context&& ctx);
 		Context& operator=(Context&& ctx);
 		virtual ~Context();
@@ -32,7 +33,6 @@ class Context
 		static Context context_new();
 
 	private:
-		Context(FpContext *pointer);
 		FpContext *ctx_ptr;  // transfer full
 };
 

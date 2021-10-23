@@ -17,26 +17,26 @@ JNIEXPORT void JNICALL Java_jfprint_FpContext_nativeClose
 
 /*
  * Class:     jfprint_FpContext
- * Method:    context_new
+ * Method:    native_context_new
  * Signature: ()Ljfprint/FpContext;
  */
-JNIEXPORT jobject JNICALL Java_jfprint_FpContext_context_1new
+JNIEXPORT jobject JNICALL Java_jfprint_FpContext_native_1context_1new
   (JNIEnv *, jclass);
 
 /*
  * Class:     jfprint_FpContext
- * Method:    n_devices
+ * Method:    native_n_devices
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_jfprint_FpContext_n_1devices
+JNIEXPORT jint JNICALL Java_jfprint_FpContext_native_1n_1devices
   (JNIEnv *, jobject);
 
 /*
  * Class:     jfprint_FpContext
- * Method:    get_device
+ * Method:    native_get_device
  * Signature: (I)Ljfprint/FpDevice;
  */
-JNIEXPORT jobject JNICALL Java_jfprint_FpContext_get_1device
+JNIEXPORT jobject JNICALL Java_jfprint_FpContext_native_1get_1device
   (JNIEnv *, jobject, jint);
 
 #ifdef __cplusplus

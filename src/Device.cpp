@@ -13,6 +13,11 @@
 #include <string>
 
 
+struct EnrollProgressCallbackData
+{
+	std::function<Device::EnrollProgressCallbackType>& callback;
+};
+
 
 static FpPrint* from_print_template(FpDevice *device, PrintTemplate& print_template)
 {
@@ -168,6 +173,51 @@ Print Device::enroll(PrintTemplate &print_template)
 											  nullptr,
 											  &error);
 
+	debug("Created FpPrint [", fp_print, "]");
+
+	if (error) {
+		debug(error->message);
+		throw Error("Deu foi pau!");
+	}
+
+	if (tmplt == fp_print) {
+		tmplt = nullptr;
+	}
+
+	return fp_print;
+}
+
+
+Print Device::enroll(std::function<EnrollProgressCallbackType> callback, PrintTemplate &print_template)
+{
+	auto lambda = [](FpDevice *device,
+                     gint completed_stages,
+                     FpPrint *print,
+                     gpointer user_data,
+                     GError *error)
+	{
+		if (error) {
+			debug("Fail with message: ", error->message);
+			return;
+		}
+		debug("Stage ", completed_stages, " from ", fp_device_get_nr_enroll_stages(device),
+			  ". Internal print is ", print, " and data is ", user_data);
+
+		EnrollProgressCallbackData *data = reinterpret_cast<EnrollProgressCallbackData*>(user_data);
+		data->callback(device, completed_stages, print, data, error);
+	};
+
+	g_autoptr(GError) error = nullptr;
+	g_autoptr(FpPrint) tmplt = from_print_template(dev_ptr, print_template);
+	EnrollProgressCallbackData data{callback};
+
+	FpPrint *fp_print = fp_device_enroll_sync(dev_ptr,
+	                                          tmplt,
+											  nullptr,
+											  (FpEnrollProgress) lambda,
+											  &data,
+											  &error);
+	
 	debug("Created FpPrint [", fp_print, "]");
 
 	if (error) {

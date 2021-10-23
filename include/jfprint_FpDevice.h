@@ -17,27 +17,51 @@ JNIEXPORT void JNICALL Java_jfprint_FpDevice_nativeClose
 
 /*
  * Class:     jfprint_FpDevice
- * Method:    get_driver
+ * Method:    native_get_driver
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_jfprint_FpDevice_get_1driver
+JNIEXPORT jstring JNICALL Java_jfprint_FpDevice_native_1get_1driver
   (JNIEnv *, jobject);
 
 /*
  * Class:     jfprint_FpDevice
- * Method:    get_device_id
+ * Method:    native_get_device_id
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_jfprint_FpDevice_get_1device_1id
+JNIEXPORT jstring JNICALL Java_jfprint_FpDevice_native_1get_1device_1id
   (JNIEnv *, jobject);
 
 /*
  * Class:     jfprint_FpDevice
- * Method:    get_name
+ * Method:    native_get_name
  * Signature: ()Ljava/lang/String;
  */
-JNIEXPORT jstring JNICALL Java_jfprint_FpDevice_get_1name
+JNIEXPORT jstring JNICALL Java_jfprint_FpDevice_native_1get_1name
   (JNIEnv *, jobject);
+
+/*
+ * Class:     jfprint_FpDevice
+ * Method:    native_open
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_jfprint_FpDevice_native_1open
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     jfprint_FpDevice
+ * Method:    native_close
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_jfprint_FpDevice_native_1close
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     jfprint_FpDevice
+ * Method:    native_enroll
+ * Signature: (Ljfprint/util/EnrollProgressInterface;Ljfprint/TemplatePrint;)Ljfprint/FpPrint;
+ */
+JNIEXPORT jobject JNICALL Java_jfprint_FpDevice_native_1enroll
+  (JNIEnv *, jobject, jobject, jobject);
 
 #ifdef __cplusplus
 }

@@ -18,6 +18,8 @@ extern "C"
 };
 
 #include <string>
+#include <functional>
+
 #include <fprint_abstraction/PrintTemplate.h>
 #include <fprint_abstraction/Print.h>
 
@@ -26,6 +28,7 @@ class Device
 {
 	public:
 		Device() = delete;
+        Device(FpDevice *device);
 		Device(Device&& dev);
 		Device& operator=(Device&& dev);
 		virtual ~Device();
@@ -38,6 +41,10 @@ class Device
 		Print enroll();
 		Print enroll(PrintTemplate &print_template);
 
+		using EnrollProgressCallbackType = void(FpDevice*, gint, FpPrint*, gpointer, GError*);
+
+		Print enroll(std::function<EnrollProgressCallbackType> callback, PrintTemplate &print_template);
+
 		bool verify(Print& print);
 
 		bool compatible(Print &print);
@@ -47,7 +54,6 @@ class Device
 
 	private:
 		friend class Context;
-		Device(FpDevice *device);
 
 	private:
 		FpDevice *dev_ptr;

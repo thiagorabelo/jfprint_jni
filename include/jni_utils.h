@@ -6,7 +6,8 @@
  */
 
 #include <jni.h>
-
+#include <fprint_abstraction/PrintTemplate.h>
+#include <fprint_abstraction/utils.h>
 
 #define CLASS_BYTE_BUFFER "Ljava/nio/ByteBuffer;"
 
@@ -15,12 +16,33 @@
 
 #define CLASS_FPCONTEXT  CLASS_SIGN("FpContext")
 #define CLASS_FPDEVICE   CLASS_SIGN("FpDevice")
+#define CLASS_FPPRINT    CLASS_SIGN("FpPrint")
+
+#define ENEROLL_PROGRESS_INTERFACE_METHOD_SIGNATURE "(Ljfprint/FpDevice;ILjfprint/FpPrint;)V"
 
 
 namespace jni
 {
 	jobject newInstance(JNIEnv *env, const char *clsName) noexcept;
 	jobject newInstance(JNIEnv *env, jclass cls) noexcept;
+
+    jmethodID getMethod(JNIEnv *env, jobject object, const char* name, const char* signature) noexcept;
+
+
+    class jCalendarFieldGetter
+    {
+        public:
+            jCalendarFieldGetter(JNIEnv *env, jobject jcalendar);
+
+            jint get(const char *fieldName);
+
+        private:
+            JNIEnv *env;
+            jobject jcalendar;
+            jclass cls;
+            jmethodID get_id;
+    };
+
 
 	namespace pointer
 	{
@@ -48,5 +70,27 @@ namespace jni
 			jobject buffer = env->GetObjectField(obj, fieldId);
 			return reinterpret_cast<T*>(env->GetDirectBufferAddress(buffer));
 		}
+
+		template<typename T>
+		T* setPointerAddress(JNIEnv *env, jobject obj, T *address) noexcept
+		{
+			return jni::pointer::setPointerAddress(env, obj, "pointer", address);
+		}
+
+        template<typename T>
+        T* getPointerAddress(JNIEnv *env, jobject obj) noexcept
+        {
+        	return jni::pointer::getPointerAddress<T>(env, obj, "pointer");
+        }
 	};
+
+
+    namespace jfprint
+    {
+        utils::simple_date getSimpleDateFromJavaCalendar(jobject jdate);
+
+        jmethodID getProgressCallbackMethod(JNIEnv *env, jobject progress);
+
+        PrintTemplate getPrintTemplateFromJavaPrintTemplate(JNIEnv *env, jobject print_template);
+    };
 }
